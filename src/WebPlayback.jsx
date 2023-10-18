@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Slider from "./slider.js";
+
 
 const track = {
     name: "",
@@ -30,7 +32,7 @@ function WebPlayback(props) {
         window.onSpotifyWebPlaybackSDKReady = () => {
 
             const player = new window.Spotify.Player({
-                name: 'Web Playback SDK',
+                name: 'Spomodoro',
                 getOAuthToken: cb => { cb(props.token); },
                 volume: 0.5
             });
@@ -97,6 +99,9 @@ function WebPlayback(props) {
                             <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
                                 &gt;&gt;
                             </button>
+                            <Slider
+                            />
+                            {/* {Slider.volume} */}
                         </div>
                     </div>
                 </div>

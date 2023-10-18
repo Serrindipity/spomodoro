@@ -115,3 +115,41 @@ body {
 }
 
 img { background: transparent; }
+
+.volumeSlider {
+  /* max width of your slider */
+  max-width: 300px;
+  height: 24px;
+  /* Optional: Only If you want to center your slider in the page */
+  margin: auto;
+}
+
+.volumeSlider-track {
+  /* Top value to align your track to the center of your thumb */
+  top: 8px;
+  /* thickness of the track */
+  height: 4px;
+ /* default color of your track */
+  background: lightgreen;
+}
+
+.volumeSlider.volumeSlider-track-0 {
+  /* color of the track before the thumb */
+  background: gray;
+}
+
+.volumeSlider-thumb {
+  cursor: pointer;
+  /*color for the thumb */
+  background: lightgreen;
+  /* shape of the thumb: circle */
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  /* remove default outline when selected */
+  outline: none;
+}
+
+.volumeSlider-thumb:hover {
+  box-shadow: 0 0 0 8px gray;
+}
