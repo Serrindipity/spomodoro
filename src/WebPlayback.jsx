@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Slider from "./slider.js";
+//import Slider from "./slider.js";
+import ReactSlider from "react-slider";
 
 
 const track = {
@@ -15,11 +16,15 @@ const track = {
 }
 
 function WebPlayback(props) {
+    const defaultVolume = 0.5;
 
     const [is_paused, setPaused] = useState(false);
     const [is_active, setActive] = useState(false);
     const [player, setPlayer] = useState(undefined);
     const [current_track, setTrack] = useState(track);
+    const [volume, setVolume] = useState(defaultVolume);
+
+    const [sliderValue, setsliderValue] = useState(50);
 
     useEffect(() => {
 
@@ -28,13 +33,15 @@ function WebPlayback(props) {
         script.async = true;
 
         document.body.appendChild(script);
+        console.log("Script created")
 
         window.onSpotifyWebPlaybackSDKReady = () => {
+            console.log("SDK ready")
 
             const player = new window.Spotify.Player({
-                name: 'Spomodoro',
+                name: 'Spomodoro Player',
                 getOAuthToken: cb => { cb(props.token); },
-                volume: 0.5
+                volume: volume
             });
 
             setPlayer(player);
@@ -50,6 +57,7 @@ function WebPlayback(props) {
             player.addListener('player_state_changed', ( state => {
 
                 if (!state) {
+                    console.log("not state")
                     return;
                 }
 
@@ -57,15 +65,23 @@ function WebPlayback(props) {
                 setPaused(state.paused);
 
                 player.getCurrentState().then( state => { 
-                    (!state)? setActive(false) : setActive(true) 
+                    (!state)? setActive(false) : setActive(true)
                 });
 
             }));
 
             player.connect();
 
+            
         };
     }, []);
+
+    // useEffect(() => {
+    //     console.log('Volume changed:', volume);
+    //     player.setVolume(volume / 100).then(() => {
+    //         console.log('Volume updated!');
+    //       });
+    //   }, [volume]);
 
     if (!is_active) { 
         return (
@@ -99,9 +115,24 @@ function WebPlayback(props) {
                             <button className="btn-spotify" onClick={() => { player.nextTrack() }} >
                                 &gt;&gt;
                             </button>
-                            <Slider
+                            <ReactSlider 
+                            className="volumeSlider"
+                            trackClassName="volumeSlider-track"
+                            thumbClassName="volumeSlider-thumb"
+                            defaultValue={defaultVolume}
+                            min = {0}
+                            max = {1}
+                            step = {0.01}
+                            //grab the current slider value and store it in a variable called volume
+                            //when the slider value changes, update the volume variable
+                            value = {volume}
+                            onChange={(volume) => {setVolume(volume)
+                                console.log('Volume changed:', volume);
+                                player.setVolume(volume).then(() => {
+                                console.log('Volume updated!');
+                                });
+                            }}
                             />
-                            {/* {Slider.volume} */}
                         </div>
                     </div>
                 </div>
